@@ -163,11 +163,11 @@ class m14tAwsS3Storage extends m14tLocalStorage {
     //-- Copy to the new location
     $response = $this->s3->copy_object(
       array( // Source
-        'bucket'   => $bucket,
+        'bucket'   => $this->getOption('bucket'),
         'filename' => $oldname,
       ),
       array( // Destination
-        'bucket'   => $bucket,
+        'bucket'   => $this->getOption('bucket'),
         'filename' => $newname
       )
     );
