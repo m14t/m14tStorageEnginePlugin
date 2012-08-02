@@ -32,7 +32,6 @@ class m14tLocalStorage implements m14tStorageEngineTemplate {
    */
   public function __construct($options = array()) {
     $default_options = array(
-      'base_path' => sfConfig::get('sf_upload_dir').'/',
       'create_missing_directories' => true,
       'mkdir_mode' => 0777,
     );
