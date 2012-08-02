@@ -25,9 +25,9 @@ class m14tAwsS3Storage extends m14tLocalStorage {
       'acl' => AmazonS3::ACL_PUBLIC,
       'storage' => AmazonS3::STORAGE_STANDARD,
       'base_path' => sys_get_temp_dir().'/'.__CLASS__.'/',
-      'key' => sfConfig::get('amazon_s3_awsAccessKey', false),
-      'secret' => sfConfig::get('amazon_s3_awsSecretKey', false),
-      'bucket' => sfConfig::get('amazon_s3_thumb_bucket', false),
+      'key' => sfConfig::get('app_amazon_s3_awsAccessKey', false),
+      'secret' => sfConfig::get('app_amazon_s3_awsSecretKey', false),
+      'bucket' => sfConfig::get('app_amazon_s3_thumb_bucket', false),
     );
 
     $ret = parent::__construct(array_merge($default_options, $options));
