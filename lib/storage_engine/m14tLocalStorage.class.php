@@ -47,7 +47,20 @@ class m14tLocalStorage implements m14tStorageEngineTemplate {
   }
 
 
+  /*
+   * @see: file_exists_locally()
+   *
+   */
   public function file_exists($filename) {
+    return $this->file_exists_locally($filename);
+  }
+
+
+  /*
+   * Wrapper around php's file_exists() function
+   *
+   */
+  protected function file_exists_locally($filename) {
     return file_exists($this->getOption('base_path') . $filename);
   }
 
@@ -125,18 +138,48 @@ class m14tLocalStorage implements m14tStorageEngineTemplate {
   }
 
 
+  /*
+   * @see: is_dir_locally()
+   *
+   */
   public function is_dir($filename) {
+    return $this->is_dir_locally($filename);
+  }
+
+
+  /*
+   * Wrapper around php's is_dir() function
+   *
+   */
+  protected function is_dir_locally($filename) {
     return is_dir(
       $this->getOption('base_path') . $filename
     );
   }
 
 
+  /*
+   * @see: is_writable_locally()
+   *
+   */
   public function is_writable($filename) {
+    return $this->is_writable_locally($filename);
+  }
+
+
+  /*
+   * Wrapper around php's is_writable() function
+   *
+   */
+  protected function is_writable_locally($filename) {
     return is_writable($this->getOption('base_path') . $filename);
   }
 
 
+  /*
+   * Wrapper around php's mkdir() function
+   *
+   */
   public function mkdir($pathname, $mode = null, $recursive = false) {
     if ( null === $mode ) {
       $mode = $this->getOption('mkdir_mode');
@@ -149,7 +192,7 @@ class m14tLocalStorage implements m14tStorageEngineTemplate {
   }
 
 
-  protected function handleDirDoesNotExist($dir) {
+  protected function handleDirDoesNotExistLocally($dir) {
     if ( $this->getOption('create_missing_directories') ) {
       if ( !$this->mkdir($dir, null, true) ) {
         throw new Exception("Unable to create directory '$dir'.");
@@ -160,6 +203,11 @@ class m14tLocalStorage implements m14tStorageEngineTemplate {
   }
 
 
+  /*
+   * @todo:  handle cases of mode = a+
+   * @todo:  better handle cases of modes w+ and a+
+   *
+   */
   protected function preOpen($filename, $mode, $set_filename = true) {
 
     if ( false !== $this->fp ) {
@@ -172,18 +220,18 @@ class m14tLocalStorage implements m14tStorageEngineTemplate {
     //-- Make sure that the nessisary files and/or directories exist
     if ( false !== stripos($mode, 'w') ) {
       //-- opening in write mode
-      if ( $this->file_exists($filename) && !$this->is_writable($filename) ) {
+      if ( $this->file_exists_locally($filename) && !$this->is_writable_locally($filename) ) {
         //-- If the file exsits, we need to be able to write to it
-        throw new Exception("The file $full_filename is not writable.");
-      } elseif ( !$this->is_dir($dir) ) {
+        throw new Exception("The file $full_filename is not writable locally.");
+      } elseif ( !$this->is_dir_locally($dir) ) {
         //-- Otherwise we need the directory to exist (and be writeable)
-        $this->handleDirDoesNotExist($dir);
+        $this->handleDirDoesNotExistLocally($dir);
       }
     } else {
       //-- opening in read mode
-      if ( !$this->file_exists($filename) ) {
+      if ( !$this->file_exists_locally($filename) ) {
         //-- the file must exist
-        throw new Exception("The file $full_filename does not exist.");
+        throw new Exception("The file $full_filename does not exist locally.");
       }
     }
 
@@ -197,7 +245,7 @@ class m14tLocalStorage implements m14tStorageEngineTemplate {
 
     $dir = dirname($newname);
     if ( !$this->is_dir($dir) ) {
-      $this->handleDirDoesNotExist($dir);
+      $this->handleDirDoesNotExistLocally($dir);
     }
 
     return rename(

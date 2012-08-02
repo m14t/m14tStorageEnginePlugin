@@ -131,7 +131,7 @@ class m14tAwsS3Storage extends m14tLocalStorage {
     $dir = dirname($filename);
 
     //-- Sync the local system with S3
-    if ( parent::file_exists($filename) ) {
+    if ( $this->file_exists_locally($filename) ) {
       //-- The file exists locally
     } else {
       if ( $this->file_exists($filename) ) {
@@ -139,7 +139,7 @@ class m14tAwsS3Storage extends m14tLocalStorage {
         //   Lets fetch the file and then open it.
         if ( !parent::is_dir($dir) ) {
           //-- We need the directory to exist (and be writeable)
-          parent::handleDirDoesNotExist($dir);
+          $this->handleDirDoesNotExistLocally($dir);
         }
         $this->s3->get_object(
           $this->getOption('bucket'),
@@ -151,27 +151,7 @@ class m14tAwsS3Storage extends m14tLocalStorage {
       }
     }
 
-    //-- Make sure that the nessisary files and/or directories exist
-    if ( false !== stripos($mode, 'w') ) {
-      //-- opening in write mode
-      if ( parent::file_exists($filename) && !parent::is_writable($filename) ) {
-        //-- If the file exsits, we need to be able to write to it
-        throw new Exception("The file $full_filename is not writable locally.");
-      } elseif ( !parent::is_dir($dir) ) {
-        //-- Otherwise we need the directory to exist (and be writeable)
-        parent::handleDirDoesNotExist($dir);
-      }
-    } else {
-      //-- opening in read mode
-      if ( !parent::file_exists($filename) ) {
-        //-- the file must exist
-        throw new Exception("The file $full_filename does not exist locally.");
-      }
-    }
-
-    if ( true === $set_filename ) {
-      $this->filename = $filename;
-    }
+    return parent::preOpen($filename, $mode, $set_filename);
   }
 
 
