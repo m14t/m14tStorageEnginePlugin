@@ -3,6 +3,7 @@
 class m14tAwsS3Storage extends m14tLocalStorage {
 
   protected
+    $s3_base_path = null,
     $s3 = null;
 
 
@@ -24,11 +25,18 @@ class m14tAwsS3Storage extends m14tLocalStorage {
     $default_options = array(
       'acl' => AmazonS3::ACL_PUBLIC,
       'storage' => AmazonS3::STORAGE_STANDARD,
-      'base_path' => sys_get_temp_dir().'/'.__CLASS__.'/',
+      'base_path' => sys_get_temp_dir() . DIRECTORY_SEPARATOR .
+                     __CLASS__ . DIRECTORY_SEPARATOR,
       'key' => false,
       'secret' => false,
       'bucket' => false,
     );
+
+    if ( array_key_exists('base_path', $options) ) {
+      $this->s3_base_path = $options['base_path'];
+      unset( $options['base_path'] );
+      $default_options['base_path'] .= $this->s3_base_path . DIRECTORY_SEPARATOR;
+    }
 
     $ret = parent::__construct(array_merge($default_options, $options));
 
@@ -54,7 +62,7 @@ class m14tAwsS3Storage extends m14tLocalStorage {
         //-- upload the file
         $response = $this->s3->create_object(
           $this->getOption('bucket'),
-          $this->filename,
+          $this->s3_base_path . $this->filename,
           array(
             'acl' => $this->getOption('acl'),
             'fileUpload' => $this->getFullFilename(),
@@ -94,7 +102,7 @@ class m14tAwsS3Storage extends m14tLocalStorage {
     //-- Compate with true, because if the file doesn't exist, we
     //   might get a 403 error instead of a 404, which will make
     //   this function return null, even though the docs say boolean
-    return (true === $this->s3->if_object_exists($bucket, $filename));
+    return (true === $this->s3->if_object_exists($bucket, $this->s3_base_path . $filename));
   }
 
 
@@ -143,7 +151,7 @@ class m14tAwsS3Storage extends m14tLocalStorage {
         }
         $this->s3->get_object(
           $this->getOption('bucket'),
-          $filename,
+          $this->s3_base_path . $filename,
           array(
             'fileDownload' => $full_filename
           )
@@ -164,11 +172,11 @@ class m14tAwsS3Storage extends m14tLocalStorage {
     $response = $this->s3->copy_object(
       array( // Source
         'bucket'   => $this->getOption('bucket'),
-        'filename' => $oldname,
+        'filename' => $this->s3_base_path . $oldname,
       ),
       array( // Destination
         'bucket'   => $this->getOption('bucket'),
-        'filename' => $newname
+        'filename' => $this->s3_base_path . $newname
       )
     );
 
@@ -196,7 +204,7 @@ class m14tAwsS3Storage extends m14tLocalStorage {
 
     $response = $this->s3->delete_object(
       $this->getOption('bucket'),
-      $filename
+      $this->s3_base_path . $filename
     );
 
     if ( true !== $response->isOK() ) {
