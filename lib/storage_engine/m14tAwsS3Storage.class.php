@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * A m14tStorageEngine implementation for storing files on Amazons's S3
+ *
+ */
 class m14tAwsS3Storage extends m14tLocalStorage {
 
   protected

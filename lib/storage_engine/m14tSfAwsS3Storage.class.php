@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This is the Symfony 1.4 depenent version of m14tAwsS3Storage
+ * A Symfony 1.4 depenent version of m14tAwsS3Storage
  *
  */
 class m14tSfAwsS3Storage extends m14tAwsS3Storage {

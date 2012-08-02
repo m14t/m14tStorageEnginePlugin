@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * A m14tStorageEngine implementation for storing files to a local
+ * filesystem.
+ *
+ */
 class m14tLocalStorage implements m14tStorageEngineTemplate {
 
   protected
@@ -11,8 +16,18 @@ class m14tLocalStorage implements m14tStorageEngineTemplate {
   /*
    * Create a new Local Storage object
    *
-   * Options:
+   * Required Options:
+   *
    *   base_path:  (string) a directory to store all files.
+   *               It must end with a closing slash.
+   *
+   * Other Options:
+   *   create_missing_directories:  (boolean) automatically create no-existant
+   *               directories when attempting to save a file to a path
+   *               that does not yet exist.
+   *
+   *   mkdir_mode: (integer) hexidecimal mode to use by default when creating
+   *               directories.
    *
    */
   public function __construct($options = array()) {
