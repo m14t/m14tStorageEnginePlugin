@@ -3,6 +3,12 @@
 A plug-able storage engine for php.
 
 
+## Dependencies:
+
+This library depends on the Amazon PHP sdk, which is available at http://aws.amazon.com/sdkforphp
+
+The contents of that SDK should be available to the autoloader
+
 ## Example:
 
 ### Class file:
