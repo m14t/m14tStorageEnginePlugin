@@ -272,7 +272,7 @@ class m14tLocalStorage implements m14tStorageEngineTemplate {
   public function unlink($filename) {
     if ( ! $this->file_exists($filename) ) {
       //-- file is already removed
-      throw new Exception("The file '$full_filename' does not exist.");
+      throw new Exception("The file '$filename' does not exist.");
     }
     return unlink($this->getOption('base_path') . $filename);
   }
