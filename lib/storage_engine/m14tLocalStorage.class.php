@@ -85,9 +85,10 @@ class m14tLocalStorage implements m14tStorageEngineTemplate {
    */
   protected function open($function, $filename, $mode, $use_include_path) {
     $this->preOpen($filename, $mode);
-    $this->fp = $function($this->getFullFilename($filename), $mode, $use_include_path);
+    $full_filename = $this->getFullFilename($filename);
+    $this->fp = $function($full_filename, $mode, $use_include_path);
     if (!$this->fp) {
-      throw new Exception("Cannot open file ($filename)");
+      throw new Exception("Cannot open file ($full_filename)");
     }
 
     return $this->fp;
