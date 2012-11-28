@@ -95,6 +95,14 @@ class m14tLocalStorage implements m14tStorageEngineTemplate {
   }
 
 
+  /**
+   * @returns array()
+   */
+  public function fgetcsv($length = 0, $delimiter = ',', $enclosure = '"', $escape = '\\') {
+    return fgetcsv($this->fp, $length, $delimiter, $enclosure, $escape);
+  }
+
+
   public function fopen($filename, $mode, $use_include_path = false) {
     return $this->open('fopen', $filename, $mode, $use_include_path);
   }

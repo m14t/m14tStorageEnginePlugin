@@ -2,6 +2,7 @@
 
 interface m14tStorageEngineTemplate {
   public function fclose();
+  public function fgetcsv($length = 0, $delimiter = ',', $enclosure = '"', $escape = '\\');
   public function file_exists($filename);
   public function fopen($filename ,$mode, $use_include_path = false);
   public function fwrite($string);
