@@ -11,6 +11,7 @@ class m14tSfLocalStorage extends m14tLocalStorage {
       'base_path' => sfConfig::get('sf_upload_dir').DIRECTORY_SEPARATOR,
     );
     $this->options = array_merge($default_options, $options);
+    return parent::__construct($this->options);
   }
 
 }
