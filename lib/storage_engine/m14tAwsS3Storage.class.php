@@ -160,6 +160,14 @@ class m14tAwsS3Storage extends m14tLocalStorage {
             'fileDownload' => $full_filename
           )
         );
+      } elseif (false !== strpos($mode, 'r')) {
+        //-- Throw an error if we are trying to open a file for reading that
+        //   does not exist.
+        throw new Exception(sprintf(
+          'The file s3://%s/%s does not exist on S3.',
+          $this->getOption('bucket'),
+          $this->s3_base_path . $filename
+        ));
       }
     }
 
