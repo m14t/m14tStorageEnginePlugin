@@ -103,8 +103,23 @@ class m14tLocalStorage implements m14tStorageEngineTemplate {
   }
 
 
+  public function fgets($length = 0) {
+    return fgets($this->fp, $length);
+  }
+
+
   public function fopen($filename, $mode, $use_include_path = false) {
     return $this->open('fopen', $filename, $mode, $use_include_path);
+  }
+
+
+  public function fread($length=0) {
+    return fread($this->fp, $length);
+  }
+
+
+  public function ftell() {
+    return ftell($this->fp);
   }
 
 
@@ -275,6 +290,11 @@ class m14tLocalStorage implements m14tStorageEngineTemplate {
       $this->getOption('base_path') . $oldname,
       $this->getOption('base_path') . $newname
     );
+  }
+  
+
+  public function rewind() {
+    return rewind($this->fp);
   }
 
 
