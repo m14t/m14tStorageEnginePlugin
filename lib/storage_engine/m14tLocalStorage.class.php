@@ -113,6 +113,11 @@ class m14tLocalStorage implements m14tStorageEngineTemplate {
   }
 
 
+  public function fread($length = 0) {
+    return fread($this->fp, $length);
+  }
+
+
   public function ftell() {
     return ftell($this->fp);
   }

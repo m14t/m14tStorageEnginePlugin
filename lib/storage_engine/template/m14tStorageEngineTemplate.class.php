@@ -7,6 +7,7 @@ interface m14tStorageEngineTemplate {
   public function ftell();
   public function file_exists($filename);
   public function fopen($filename ,$mode, $use_include_path = false);
+  public function fread($length = 0);
   public function fwrite($string);
   public function gzclose();
   public function gzeof();
